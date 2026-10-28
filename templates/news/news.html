@@ -1,0 +1,270 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block title %}Yangiliklar{% endblock %}
+
+{% block css %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
+    }
+
+    body {
+        background: #eef3fa;
+    }
+
+    .page {
+        padding: 35px;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .page-header h1 {
+        font-size: 48px;
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    .page-header p {
+        margin-top: 8px;
+        color: #7b8794;
+        font-size: 18px;
+    }
+
+    .add-btn {
+        background: #3558e6;
+        color: #fff;
+        padding: 12px 22px;
+        border-radius: 14px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+        transition: .25s;
+    }
+
+    .add-btn:hover {
+        background: #2948ca;
+    }
+
+    .news-list {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+    }
+
+    .news-card {
+        background: #fff;
+        border-radius: 18px;
+        overflow: hidden;
+        display: flex;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, .06);
+        transition: .25s;
+    }
+
+    .news-card:hover {
+        transform: translateY(-4px);
+    }
+
+    .news-image {
+        width: 250px;
+        min-width: 250px;
+        height: 170px;
+    }
+
+    .news-image img {
+        margin-top: 13px;
+        margin-left: 10px;
+        width: 260px;
+        height: 160px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .news-body {
+        flex: 1;
+        padding: 25px;
+    }
+
+    .news-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 14px;
+    }
+
+    .news-top h2 {
+        font-size: 28px;
+        color: #24324a;
+    }
+
+    .badge {
+        background: #edf2ff;
+        color: #3558e6;
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .news-meta {
+        display: flex;
+        gap: 10px;
+        color: #8a94a6;
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+
+    .news-body p {
+        color: #5d6778;
+        line-height: 1.7;
+        font-size: 16px;
+    }
+</style>
+{% endblock %}
+
+{% block sidebar %}
+
+                <li><a href="{% url 'main' %}"><i class="bi bi-house" ></i> Bosh sahifa</a></li>
+
+                {% if request.user.role == 'teacher' %}
+                <li><a href="{% url 'teacher_profile' %}"><i class="bi bi-person-workspace"></i> Profile</a></li>
+                {% elif request.user.role == 'student' %}
+                <li><a href="{% url 'student_profile' %}"><i class="bi bi-person-workspace"></i> Profile</a></li>
+                {% endif %}
+
+                <li><a href="{% url 'courses' %}"><i class="bi bi-book"></i> Kurslar</a></li>
+
+                <li><a href="{% url 'group' %}"><i class="bi bi-people"></i> Guruhlar</a></li>
+
+                <li><a href="#"><i class="bi bi-calendar-week"></i> Haftalik jadval</a></li>
+
+                <li><a href="#"><i class="bi bi-person-check"></i> Davomat</a></li>
+
+                <li><a href="#"><i class="bi bi-journal-bookmark"></i> Guruh jurnali</a></li>
+
+                <li><a href="#"><i class="bi bi-file-earmark-text"></i> Normativ</a></li>
+
+                <li><a href="#"><i class="bi bi-list-task"></i> Tekshirish navbati</a></li>
+
+                <li><a href="#"><i class="bi bi-star"></i> Baholash</a></li>
+
+                <li><a href="#"><i class="bi bi-bar-chart"></i> Natijalarim</a></li>
+
+                <li><a href="#"><i class="bi bi-coin"></i> Coin sahifasi</a></li>
+
+                <li><a href="#"><i class="bi bi-trophy"></i> Reyting</a></li>
+
+                <li><a href="#"><i class="bi bi-bag"></i> Do'kon</a></li>
+
+                <li><a href="#"><i class="bi bi-cart3"></i> Xaridlar</a></li>
+
+                <li><a class="active" href="{% url 'news' %}"><i class="bi bi-newspaper"></i> Yangiliklar</a></li>
+
+                <li><a href="#"><i class="bi bi-mortarboard"></i> Student dashboard</a></li>
+
+                <li><a href="#"><i class="bi bi-person-workspace"></i> Teacher dashboard</a></li>
+
+{% endblock %}
+
+{% block topbar %}
+
+                    <a href="{% url 'main' %}">Bosh sahifa</a>
+
+                    <a href="{% url 'courses' %}">Kurslar</a>
+
+                    <a href="{% url 'group' %}">Guruhlar</a>
+
+                    <a href="#">Jadval</a>
+
+                    <a href="#">Normativ</a>
+
+                    <a href="#">Do'kon</a>
+
+                    <a href="{% url 'news' %}"  style="color: #2952e3">Yangiliklar</a>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="page">
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>Yangiliklar</h1>
+
+            <p>Barcha yangiliklarni boshqarish</p>
+
+        </div>
+
+        {% if request.user.role == 'admin' %}
+        <a href="{% url 'admin_panel' %}" class="add-btn">
+
+            <i class="bi bi-plus-lg"></i>
+
+            Yangilik qo'shish
+
+        </a>
+        {% endif %}
+
+    </div>
+
+    <div class="news-list">
+        <!-- News 1 -->
+
+        {% for new in news %}
+
+        <div class="news-card">
+
+
+            <img src="{{ new.image.url }}" alt="" style="width: 300px">
+
+
+            <div class="news-body">
+
+                <div class="news-top">
+
+                    <h2>{{ new.title }}</h2>
+
+                    <span class="badge">
+                        {{ new.category }}
+                    </span>
+
+                </div>
+
+                <div class="news-meta">
+
+                    <span>
+                        <i class="bi bi-calendar3"></i>
+                        {{ new.date }}
+                    </span>
+
+
+                </div>
+
+                <p>
+                    {{ new.description |slice:':50' }}...
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

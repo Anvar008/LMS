@@ -1,0 +1,795 @@
+{% extends 'main.html' %}
+
+{% block title %}
+Group Detail
+{% endblock %}
+
+{% block css %}
+<style>
+
+
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .group-detail {
+        padding: 28px;
+        max-width: 1400px;
+        margin: 0 auto;
+        color: #26364d;
+    }
+
+
+    /* ========================= */
+    /* HEADER */
+    /* ========================= */
+
+    .group-header {
+        margin-bottom: 18px;
+    }
+
+    .group-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .group-title h1 {
+        margin: 0;
+        font-size: 25px;
+        font-weight: 700;
+        color: #1d2d46;
+    }
+
+    .group-info {
+        margin: 5px 0 0;
+        color: #8795a9;
+        font-size: 14px;
+    }
+
+    .group-info span {
+        margin: 0 5px;
+    }
+
+
+    /* маленькие B4.3 и т.д. */
+
+    .version {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 2px 6px;
+
+        border-radius: 6px;
+
+        background: #edf2fa;
+
+        color: #8491a5;
+
+        font-size: 9px;
+        font-weight: 600;
+
+        white-space: nowrap;
+    }
+
+
+    /* ========================= */
+    /* CARD */
+    /* ========================= */
+
+    .card {
+    width: 95%;
+    max-width: 1100px;
+}
+
+    .card {
+        background: #ffffff;
+
+        border: 1px solid #e4e9f0;
+
+        border-radius: 9px;
+
+        padding: 16px;
+
+        margin-bottom: 16px;
+
+        box-shadow: 0 2px 7px rgba(30, 55, 90, 0.03);
+    }
+
+
+    .card-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .card-title h2 {
+        margin: 0;
+
+        font-size: 16px;
+
+        color: #26364d;
+
+        font-weight: 700;
+    }
+
+
+    /* ========================= */
+    /* ADD STUDENT */
+    /* ========================= */
+
+    .add-student-form {
+        display: flex;
+
+        align-items: flex-end;
+
+        gap: 10px;
+
+        margin-top: 14px;
+
+        margin-bottom: 14px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+
+        gap: 5px;
+    }
+
+    .form-group label {
+        font-size: 11px;
+
+        color: #6f7e93;
+
+        font-weight: 500;
+    }
+
+
+    .student-select {
+        flex: 1;
+    }
+
+    .date-field {
+        width: 120px;
+    }
+
+
+    .form-group select,
+    .form-group input {
+        height: 30px;
+
+        padding: 0 9px;
+
+        border: 1px solid #d9e0e8;
+
+        border-radius: 5px;
+
+        background: #fff;
+
+        color: #64748b;
+
+        font-size: 11px;
+
+        outline: none;
+    }
+
+    .form-group select:focus,
+    .form-group input:focus {
+        border-color: #3157d9;
+    }
+
+
+    /* ========================= */
+    /* BUTTONS */
+    /* ========================= */
+
+    .blue-btn {
+        height: 30px;
+
+        border: none;
+
+        border-radius: 5px;
+
+        padding: 0 14px;
+
+        background: #3157d9;
+
+        color: white;
+
+        font-size: 11px;
+
+        font-weight: 600;
+
+        cursor: pointer;
+
+        text-decoration: none;
+
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+    }
+
+    .blue-btn:hover {
+        background: #2649c5;
+    }
+
+
+    .remove-btn {
+        height: 24px;
+
+        padding: 0 10px;
+
+        border-radius: 5px;
+
+        border: 1px solid #f2bdb8;
+
+        background: white;
+
+        color: #e87970;
+
+        font-size: 10px;
+
+        cursor: pointer;
+    }
+
+    .remove-btn:hover {
+        background: #fff5f4;
+    }
+
+
+    /* ========================= */
+    /* STUDENTS TABLE */
+    /* ========================= */
+
+    .students-table {
+        width: 100%;
+    }
+
+    .table-header,
+    .student-row {
+        display: grid;
+
+        grid-template-columns: 1.1fr 1fr 1fr;
+
+        align-items: center;
+    }
+
+
+    .table-header {
+        color: #7b889b;
+
+        font-size: 10px;
+
+        font-weight: 600;
+
+        padding: 7px 5px;
+
+        border-bottom: 1px solid #edf0f4;
+    }
+
+
+    .student-row {
+        min-height: 37px;
+
+        padding: 0 5px;
+
+        border-bottom: 1px solid #edf0f4;
+
+        color: #526177;
+
+        font-size: 11px;
+    }
+
+    .student-row:last-child {
+        border-bottom: none;
+    }
+
+
+    .student-row > div:last-child {
+        display: flex;
+
+        align-items: center;
+
+        gap: 6px;
+    }
+
+
+    .empty-row {
+        padding: 20px;
+
+        text-align: center;
+
+        color: #9aa5b5;
+
+        font-size: 12px;
+    }
+
+
+    /* ========================= */
+    /* SECTION HEADER */
+    /* ========================= */
+
+    .section-header {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        margin-bottom: 8px;
+    }
+
+
+    .add-small-btn {
+        width: 25px;
+        height: 25px;
+
+        border: none;
+
+        border-radius: 5px;
+
+        background: #3157d9;
+
+        color: white;
+
+        font-size: 19px;
+
+        line-height: 25px;
+
+        cursor: pointer;
+    }
+
+    .add-small-btn:hover {
+        background: #2649c5;
+    }
+
+
+    /* ========================= */
+    /* SCHEDULE */
+    /* ========================= */
+
+    .schedule-list {
+        margin-top: 5px;
+    }
+
+    .schedule-row {
+        min-height: 28px;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 3px;
+
+        border-bottom: 1px solid #edf0f4;
+
+        color: #56657a;
+
+        font-size: 11px;
+    }
+
+
+    .schedule-row:last-child {
+        border-bottom: none;
+    }
+
+
+    /* ========================= */
+    /* WARNING */
+    /* ========================= */
+
+    .room-warning {
+        margin-top: 9px;
+
+        padding: 8px 10px;
+
+        border-radius: 6px;
+
+        background: #ffe8e7;
+
+        border: 1px solid #ffd2cf;
+
+        color: #e47770;
+
+        font-size: 10px;
+    }
+
+    .room-warning .version {
+        margin-left: 5px;
+    }
+
+
+    /* ========================= */
+    /* JOURNAL */
+    /* ========================= */
+
+    .journal-actions {
+        display: flex;
+
+        align-items: center;
+
+        gap: 5px;
+    }
+
+
+    .journal-link {
+        color: #5376d9;
+
+        text-decoration: none;
+
+        font-size: 10px;
+
+        font-weight: 500;
+    }
+
+    .journal-link:hover {
+        text-decoration: underline;
+    }
+
+
+    .journal-btn {
+        height: 28px;
+
+        padding: 0 12px;
+
+        font-size: 10px;
+    }
+
+
+    .journal-list {
+        margin-top: 4px;
+    }
+
+
+    .journal-row {
+        display: grid;
+
+        grid-template-columns: 70px 20px 1fr;
+
+        align-items: center;
+
+        min-height: 28px;
+
+        border-bottom: 1px solid #edf0f4;
+
+        font-size: 11px;
+    }
+
+    .journal-row:last-child {
+        border-bottom: none;
+    }
+
+
+    .journal-row span {
+        color: #8390a3;
+    }
+
+
+    .journal-row a {
+        color: #5275d7;
+
+        text-decoration: none;
+
+        font-weight: 500;
+    }
+
+    .journal-row a:hover {
+        text-decoration: underline;
+    }
+
+
+    /* ========================= */
+    /* RESPONSIVE */
+    /* ========================= */
+
+    @media (max-width: 800px) {
+
+        .group-detail {
+            padding: 15px;
+        }
+
+        .add-student-form {
+            flex-wrap: wrap;
+        }
+
+        .student-select {
+            width: 100%;
+            flex: none;
+        }
+
+        .date-field {
+            width: calc(100% - 100px);
+        }
+
+        .table-header,
+        .student-row {
+            grid-template-columns: 1fr 1fr 100px;
+        }
+
+    }
+
+</style>
+{% endblock %}
+
+{% block sidebar %}
+    <li><a href="{% url 'main' %}"><i class="bi bi-house" ></i> Bosh sahifa</a></li>
+
+    {% if request.user.role == 'teacher' %}
+    <li><a href="{% url 'teacher_profile' %}"><i class="bi bi-person-workspace"></i> Profile</a></li>
+    {% elif request.user.role == 'student' %}
+    <li><a href="{% url 'student_profile' %}"><i class="bi bi-person-workspace"></i> Profile</a></li>
+    {% endif %}
+
+    <li><a href="{% url 'courses' %}"><i class="bi bi-book"></i> Kurslar</a></li>
+
+    <li><a href="{% url 'group' %}"><i class="bi bi-people"></i> Guruhlar</a></li>
+
+    <li><a href="#"><i class="bi bi-calendar-week"></i> Haftalik jadval</a></li>
+
+    <li><a href="#"><i class="bi bi-person-check"></i> Davomat</a></li>
+
+    <li><a href="#"><i class="bi bi-journal-bookmark"></i> Guruh jurnali</a></li>
+
+    <li><a href="#"><i class="bi bi-file-earmark-text"></i> Normativ</a></li>
+
+    <li><a href="#"><i class="bi bi-list-task"></i> Tekshirish navbati</a></li>
+
+    <li><a href="#"><i class="bi bi-star"></i> Baholash</a></li>
+
+    <li><a href="#"><i class="bi bi-bar-chart"></i> Natijalarim</a></li>
+
+    <li><a href="#"><i class="bi bi-coin"></i> Coin sahifasi</a></li>
+
+    <li><a href="#"><i class="bi bi-trophy"></i> Reyting</a></li>
+
+    <li><a href="#"><i class="bi bi-bag"></i> Do'kon</a></li>
+
+    <li><a href="#"><i class="bi bi-cart3"></i> Xaridlar</a></li>
+
+    <li><a href="{% url 'news' %}"><i class="bi bi-newspaper"></i> Yangiliklar</a></li>
+
+    <li><a href="#"><i class="bi bi-mortarboard"></i> Student dashboard</a></li>
+
+    <li><a href="#"><i class="bi bi-person-workspace"></i> Teacher dashboard</a></li>
+{% endblock %}
+
+{% block topbar %}
+    <a href="{% url 'main' %}">Bosh sahifa</a>
+
+    <a href="{% url 'courses' %}">Kurslar</a>
+
+    <a href="{% url 'group' %}">Guruhlar</a>
+
+    <a href="#">Jadval</a>
+
+    <a href="#">Normativ</a>
+
+    <a href="#">Do'kon</a>
+
+    <a href="{% url 'news' %}">Yangiliklar</a>
+{% endblock %}
+
+{% block content %}
+
+<div class="group-detail">
+
+    <!-- Заголовок группы -->
+    <div class="group-header">
+        <div>
+            <div class="group-title">
+                <h1>{{ group.title }}</h1>
+            </div>
+
+            <p class="group-info">
+                {{ group.course.title }}
+                <span>•</span>
+                {{ group.teacher.user.get_full_name }}
+                {% if group.teacher %}
+                    <span>•</span>
+                    teacher: {{ group.teacher.user.get_full_name }}
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- УЧЕНИКИ -->
+    <!-- ========================= -->
+
+    <section class="card">
+
+        <div class="card-title">
+            <h2>O'quvchilar</h2>
+        </div>
+
+        <!-- Добавление ученика -->
+        <form method="POST" class="add-student-form">
+
+            {% csrf_token %}
+
+            <div class="form-group student-select">
+                <label for="student">O'quvchi</label>
+
+                <select name="student" id="student">
+                    <option value="">Tanlang...</option>
+                    {% for student in available_students %}
+                        <option value="{{ student.id }}">
+                            {{ student.user.get_full_name }}
+                        </option>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+
+            <div class="form-group date-field">
+                <label for="join_date">Sana</label>
+
+                <input
+                    type="date"
+                    name="join_date"
+                    id="join_date"
+                >
+            </div>
+
+
+            <button type="submit" class="blue-btn">
+                Qo'shish
+            </button>
+
+            <span class="version">B4.4</span>
+
+        </form>
+
+
+        <!-- Таблица учеников -->
+        <div class="students-table">
+
+            <div class="table-header">
+                <div>Ismi</div>
+                <div>Qo'shilgan sana</div>
+                <div>Amal</div>
+            </div>
+
+
+            {% for student in group.students.all %}
+
+            <div class="student-row">
+
+                <div>
+                    {{ student.user.get_full_name }}
+                </div>
+
+                <div>
+                    {{ student.joined_at|date:"d.m.Y" }}
+                </div>
+
+
+            </div>
+
+            {% empty %}
+
+            <div class="empty-row">
+                Hozircha o'quvchilar yo'q
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- РАСПИСАНИЕ -->
+    <!-- ========================= -->
+
+    <section class="card">
+
+        <div class="section-header">
+
+            <div class="card-title">
+                <h2>Dars jadvali</h2>
+                <span class="version">B5.1</span>
+            </div>
+
+            <button class="add-small-btn">
+                +
+            </button>
+
+        </div>
+
+
+        <div class="schedule-list">
+
+            {% for lesson in schedule %}
+
+                <div class="schedule-row">
+                    <span>{{ lesson.day }}</span>
+                    <span>{{ lesson.start_time }}-{{ lesson.end_time }}</span>
+                    <span>- {{ lesson.room }}</span>
+                </div>
+
+            {% empty %}
+
+                <div class="empty-row">
+                    Dars jadvali mavjud emas
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- Занятая аудитория -->
+        <div class="room-warning">
+            Bu xona band: P-02 (14:00-16:00)
+            <span class="version">B5.2</span>
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- ДАРСЫ / ЖУРНАЛ -->
+    <!-- ========================= -->
+
+    <section class="card">
+
+        <div class="section-header">
+
+            <div class="card-title">
+                <h2>Darslar (jurnal)</h2>
+            </div>
+
+            <div class="journal-actions">
+
+                <a href="#" class="journal-link">
+                    Jurnalni ko'rish
+                </a>
+
+                <span class="version">B6.4</span>
+
+                <a href="#" class="blue-btn journal-btn">
+                    Dars qayd qilish
+                </a>
+
+                <span class="version">B6.1</span>
+
+            </div>
+
+        </div>
+
+
+        <div class="journal-list">
+
+            <div class="journal-row">
+                <span>16.07.2026</span>
+                <span>—</span>
+                <a href="#">O'zgaruvchilar</a>
+            </div>
+
+            <div class="journal-row">
+                <span>14.07.2026</span>
+                <span>—</span>
+                <a href="#">Kirish. Muhit sozlash</a>
+            </div>
+
+            <div class="journal-row">
+                <span>11.07.2026</span>
+                <span>—</span>
+                <a href="#">Ma'lumot turlari</a>
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+{% endblock %}

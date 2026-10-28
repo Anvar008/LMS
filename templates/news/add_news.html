@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add News</title>
+</head>
+<body>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Add</button>
+    <a href="{% url 'add_news_category' %}">Add News Category</a>
+    <a href="{% url 'admin_panel' %}">Back</a>
+  </form>
+</body>
+</html>

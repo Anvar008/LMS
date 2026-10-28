@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Course Category</title>
+</head>
+<body>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Add</button>
+      <a href="{% url 'admin_panel' %}">Back</a>
+    </form>
+</body>
+</html>

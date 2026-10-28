@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}LMS O'quv Markazi{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    {% block css %}
+    {% endblock %}
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #eef3f8;
+            font-family: Inter, Arial, sans-serif;
+        }
+
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ================= Sidebar ================= */
+
+        .sidebar {
+
+            width: 265px;
+            background: white;
+            border-right: 1px solid #e4e8ef;
+
+        }
+
+        .logo {
+
+            height: 75px;
+
+            display: flex;
+            align-items: center;
+
+            padding-left: 28px;
+
+            font-weight: 700;
+
+            font-size: 22px;
+
+            color: #2146d0;
+
+        }
+
+        .sidebar ul {
+
+            list-style: none;
+
+            padding: 15px;
+
+        }
+
+        .sidebar li {
+
+            margin-bottom: 8px;
+
+        }
+
+        .sidebar a {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            text-decoration: none;
+
+            color: #5a6475;
+
+            padding: 12px 15px;
+
+            border-radius: 12px;
+
+            transition: .25s;
+
+            font-size: 15px;
+
+        }
+
+        .sidebar a:hover {
+
+            background: #edf3ff;
+
+            color: #2146d0;
+
+        }
+
+        .sidebar .active {
+
+            background: #2146d0;
+
+            color: white;
+
+        }
+
+        /* ================= Content ================= */
+
+        .content {
+
+            flex: 1;
+
+        }
+
+        /* ================= Navbar ================= */
+
+        .topbar {
+
+            background: white;
+
+            height: 75px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 0 35px;
+
+            border-bottom: 1px solid #e5e9ef;
+
+        }
+
+        .menu {
+
+            display: flex;
+
+            gap: 28px;
+
+        }
+
+        .menu a {
+
+            color: #6d7384;
+
+            text-decoration: none;
+
+            font-weight: 500;
+
+        }
+
+        .menu a:hover {
+
+            color: #2146d0;
+
+        }
+
+        .authentication {
+
+            display: flex;
+
+            gap: 28px;
+
+        }
+
+        .authentication a {
+
+
+            text-decoration: none;
+
+            font-weight: 500;
+
+        }
+
+        .authentication button {
+
+            width: 100px;
+            height: 40px;
+            border-radius: 15px;
+            border: white solid;
+            background: #2146d0;
+            color: white
+
+        }
+
+
+        .authentication button:hover {
+
+            color: #2146d0;
+            background-color: white
+
+        }
+
+        .profile {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+        }
+
+        .avatar {
+
+            width: 45px;
+
+            height: 45px;
+
+            border-radius: 50%;
+
+            background: #2146d0;
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-weight: 700;
+
+        }
+
+        .logout {
+
+            background: #f4f7fc;
+
+            border: none;
+
+            padding: 10px 18px;
+
+            border-radius: 10px;
+
+        }
+
+        /* ================= Main ================= */
+
+        .container-fluid {
+
+            padding: 35px;
+
+        }
+
+        .banner {
+
+            background: linear-gradient(120deg, #1c47d8, #5f7dff);
+
+            color: white;
+
+            border-radius: 22px;
+
+            padding: 45px;
+
+            margin-bottom: 35px;
+
+            overflow: hidden;
+
+        }
+
+        .banner h1 {
+
+            font-size: 36px;
+
+            font-weight: 700;
+
+        }
+
+        .banner p {
+
+            margin-top: 12px;
+
+            opacity: .92;
+
+        }
+
+        .cards {
+
+            display: grid;
+
+            grid-template-columns: 2fr 1fr;
+
+            gap: 25px;
+
+        }
+
+        .news {
+
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+        }
+
+        .schedule {
+
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+        }
+
+        .section-title {
+
+            font-size: 22px;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .news-card {
+
+            display: flex;
+
+            gap: 18px;
+
+            border: 1px solid #edf0f5;
+
+            padding: 16px;
+
+            border-radius: 14px;
+
+            margin-bottom: 15px;
+
+            transition: .25s;
+
+        }
+
+        .news-card:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow: 0 12px 25px rgba(0, 0, 0, .06);
+
+        }
+
+        .news-image {
+
+            width: 110px;
+
+            height: 80px;
+
+            border-radius: 12px;
+
+            background: #dbe5ff;
+
+        }
+
+        .news-content h5 {
+
+            margin-bottom: 8px;
+
+        }
+
+        .schedule-item {
+
+            border-bottom: 1px solid #edf1f6;
+
+            padding: 14px 0;
+
+        }
+
+        .schedule-item:last-child {
+
+            border: none;
+
+        }
+
+        .time {
+
+            font-size: 13px;
+
+            color: #7b8596;
+
+        }
+
+        .course-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 22px;
+
+            margin-top: 35px;
+
+        }
+
+        .course-card {
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 22px;
+
+            transition: .3s;
+
+            box-shadow: 0 3px 10px rgba(0, 0, 0, .04);
+
+        }
+
+        .course-card:hover {
+
+            transform: translateY(-6px);
+
+            box-shadow: 0 18px 35px rgba(0, 0, 0, .08);
+
+        }
+
+        .course-image {
+
+            width: 100%;
+
+            height: 170px;
+
+            border-radius: 15px;
+
+            background: #dce7ff;
+
+            margin-bottom: 18px;
+
+        }
+
+        .course-card h4 {
+
+            margin-bottom: 10px;
+
+        }
+
+        .badge-blue {
+
+            background: #edf3ff;
+
+            color: #2952e3;
+
+            padding: 7px 12px;
+
+            border-radius: 25px;
+
+            font-size: 13px;
+
+            display: inline-block;
+
+            margin-top: 10px;
+
+        }
+
+        @media(max-width:1200px) {
+
+            .cards {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .course-grid {
+
+                grid-template-columns: repeat(2, 1fr);
+
+            }
+
+        }
+
+        @media(max-width:768px) {
+
+            .sidebar {
+
+                display: none;
+
+            }
+
+            .course-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .topbar {
+
+                padding: 0 15px;
+
+            }
+
+            .container-fluid {
+
+                padding: 20px;
+
+            }
+
+            .menu {
+
+                display: none;
+
+            }
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="wrapper">
+
+        <aside class="sidebar">
+
+            {% block logo %}
+            <div class="logo">
+                LMS
+                {% if request.user.role == 'admin' %}
+                <a href="{% url 'admin_panel' %}" style="margin-left: 50px">Admin Panel</a>
+                {% endif %}
+            </div>
+            {% endblock %}
+
+
+            <ul>
+                {% block sidebar %}
+                <li><a class="active" href="{% url 'main' %}"><i class="bi bi-house" ></i> Bosh sahifa</a></li>
+
+                {% if request.user.role == 'teacher' %}
+                <li><a href="{% url 'teacher_profile' %}"><i class="bi bi-person-workspace"></i> Profile</a></li>
+                {% elif request.user.role == 'student' %}
+                <li><a href="{% url 'student_profile' %}"><i class="bi bi-person-workspace"></i> Profile</a></li>
+                {% endif %}
+
+                <li><a href="{% url 'courses' %}"><i class="bi bi-book"></i> Kurslar</a></li>
+
+                <li><a href="{% url 'group' %}"><i class="bi bi-people"></i> Guruhlar</a></li>
+
+                <li><a href="#"><i class="bi bi-calendar-week"></i> Haftalik jadval</a></li>
+
+                <li><a href="#"><i class="bi bi-person-check"></i> Davomat</a></li>
+
+                <li><a href="#"><i class="bi bi-journal-bookmark"></i> Guruh jurnali</a></li>
+
+                <li><a href="#"><i class="bi bi-file-earmark-text"></i> Normativ</a></li>
+
+                <li><a href="#"><i class="bi bi-list-task"></i> Tekshirish navbati</a></li>
+
+                <li><a href="#"><i class="bi bi-star"></i> Baholash</a></li>
+
+                <li><a href="#"><i class="bi bi-bar-chart"></i> Natijalarim</a></li>
+
+                <li><a href="#"><i class="bi bi-coin"></i> Coin sahifasi</a></li>
+
+                <li><a href="#"><i class="bi bi-trophy"></i> Reyting</a></li>
+
+                <li><a href="#"><i class="bi bi-bag"></i> Do'kon</a></li>
+
+                <li><a href="#"><i class="bi bi-cart3"></i> Xaridlar</a></li>
+
+                <li><a href="{% url 'news' %}"><i class="bi bi-newspaper"></i> Yangiliklar</a></li>
+
+                <li><a href="#"><i class="bi bi-mortarboard"></i> Student dashboard</a></li>
+
+                <li><a href="#"><i class="bi bi-person-workspace"></i> Teacher dashboard</a></li>
+                {% endblock %}
+
+            </ul>
+
+        </aside>
+
+        <div class="content">
+
+            <header class="topbar">
+
+                <div class="menu">
+                    {% block topbar %}
+                    <a href="{% url 'main' %}" style="color: #2952e3">Bosh sahifa</a>
+
+                    <a href="{% url 'courses' %}">Kurslar</a>
+
+                    <a href="{% url 'group' %}">Guruhlar</a>
+
+                    <a href="#">Jadval</a>
+
+                    <a href="#">Normativ</a>
+
+                    <a href="#">Do'kon</a>
+
+                    <a href="{% url 'news' %}">Yangiliklar</a>
+                    {% endblock %}
+                </div>
+
+                {% if not request.user.is_authenticated %}
+
+                <div class="authentication">
+                    <a href="{% url 'sign_up' %}"><button>Sign up</button></a>
+
+                    <a href="{% url 'sign_in' %}"><button>Sign in</button></a>
+                </div>
+
+                {% else %}
+
+                <div class="authentication">
+                    <a href="{% url 'sign_out' %}"><button>Sign out</button></a>
+                </div>
+
+                {% endif %}
+
+
+
+            </header>
+{% block content %}
+            <div class="container-fluid">
+
+                <section class="banner">
+
+                    <h1>
+                        LMS o'quv markazi
+                    </h1>
+
+                    <p>
+
+                        Bilim — eng yaxshi investitsiya. Bugungi darslaringizni va yangiliklarni shu yerdan
+                        kuzatishingiz mumkin.
+
+                    </p>
+
+                </section>
+                <div class="cards">
+
+                    <section class="news">
+
+                        <div class="section-title">
+                            Yangiliklar
+                        </div>
+
+                        {% for new in news %}
+
+                        <div class="news-card">
+
+                            <div class="news-image"><img width="110px" height="80px" style="border-radius:13px;" src="{{new.image.url}}"></div>
+
+                            <div class="news-content">
+
+                                <h5>
+                                    {{new.title}}
+                                </h5>
+
+                                <p>
+
+                                    {{new.description}}
+
+                                </p>
+
+                                <span class="time">
+
+                                    {{new.date}}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </section>
+
+                    <aside class="schedule">
+
+                        <div class="section-title">
+
+                            Bugungi darslar
+
+                        </div>
+
+                        <div class="schedule-item">
+
+                            <strong>
+
+                                Python Backend
+
+                            </strong>
+
+                            <div class="time">
+
+                                14:00 - 15:30
+
+                            </div>
+
+                        </div>
+
+                        <div class="schedule-item">
+
+                            <strong>
+
+                                Frontend HTML/CSS
+
+                            </strong>
+
+                            <div class="time">
+
+                                16:00 - 17:30
+
+                            </div>
+
+                        </div>
+
+                        <div class="schedule-item">
+
+                            <strong>
+
+                                JavaScript
+
+                            </strong>
+
+                            <div class="time">
+
+                                18:00 - 19:30
+
+                            </div>
+
+                        </div>
+
+                        <div class="schedule-item">
+
+                            <strong>
+
+                                Individual dars
+
+                            </strong>
+
+                            <div class="time">
+
+                                20:00 - 21:00
+
+                            </div>
+
+                        </div>
+
+                    </aside>
+
+                </div>
+
+                <div class="section-title mt-5">
+
+                    Kurslarimiz
+
+                </div>
+
+                <div class="course-grid">
+
+                    {% for course in courses %}
+
+                    <div class="course-card">
+
+                        <img style="width: 200px; height: 200px; margin-left: 70px" src="{{ course.image.url }}">
+
+                        <h4>
+
+                            {{ course.category }} {{course.title}}
+
+                        </h4>
+
+                        <p>
+
+                            {{ course.description }}
+
+                        </p>
+
+                        <span class="badge-blue">
+
+                            {{ course.duration }} oy
+
+                        </span>
+
+                        <a href="{% url 'courses' %}" style="margin-left: 150px; font-size: 20px">More info</a>
+
+                    </div>
+
+                    {% endfor %}
+                </div>
+                <div class="row mt-5">
+
+                    <div class="col-lg-4 mb-4">
+
+                        <div class="course-card text-center">
+
+                            <h2 class="text-primary fw-bold">
+                                {{students_count}}+
+                            </h2>
+
+                            <p class="text-muted mb-0">
+                                Faol o'quvchilar
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4 mb-4">
+
+                        <div class="course-card text-center">
+
+                            <h2 class="text-success fw-bold">
+                                {{teachers_count}}
+                            </h2>
+
+                            <p class="text-muted mb-0">
+                                Professional ustozlar
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4 mb-4">
+
+                        <div class="course-card text-center">
+
+                            <h2 class="text-warning fw-bold">
+                                {{courses_count}}
+                            </h2>
+
+                            <p class="text-muted mb-0">
+                                Faol kurslar
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <footer class="mt-5 text-center text-muted">
+
+                    <hr>
+
+                    <p>
+
+                        © 2026 LMS O'quv Markazi. Barcha huquqlar himoyalangan.
+
+                    </p>
+
+                </footer>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

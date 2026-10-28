@@ -1,0 +1,364 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block title %} Profile {% endblock %}
+
+{% block css %}
+
+<style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef5fb;
+            color: #111827;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1450px;
+            margin: 20px auto;
+        }
+
+        .page-title {
+            font-size: 54px;
+            font-weight: 700;
+            margin-bottom: 40px;
+        }
+
+        .profile-wrapper {
+            display: grid;
+            grid-template-columns: 450px 1fr;
+            gap: 40px;
+        }
+
+        /* LEFT CARD */
+
+        .profile-card {
+            background: white;
+            border-radius: 24px;
+            padding: 50px 43px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .avatar {
+            width: 250px;
+            height: 315px;
+            margin: 50px auto 85px;
+
+            border: 1px solid #b8c8ff;
+            border-radius: 45px;
+
+            overflow: hidden;
+            background: #f5f5f5;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+
+
+        .username {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .role {
+            background: #eaf1ff;
+            color: #2852e8;
+
+            border-radius: 30px;
+
+            padding: 12px;
+            font-size: 25px;
+            font-weight: 600;
+
+            margin-bottom: 25px;
+        }
+
+        .phone-text {
+            color: #58718d;
+            font-size: 23px;
+        }
+
+        /* RIGHT CARD */
+
+        .edit-card {
+            background: white;
+            border-radius: 24px;
+            padding: 45px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .edit-title {
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 21px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+
+            border: 1px solid #d5dce5;
+            border-radius: 15px;
+
+            padding: 16px;
+
+            font-size: 20px;
+            outline: none;
+        }
+
+        .form-group input {
+            height: 63px;
+        }
+
+        .form-group textarea {
+            height: 63px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #3155ff;
+        }
+
+        /* FILE INPUT */
+
+        .file-input {
+            width: 100%;
+            height: 63px;
+
+            border: 1px solid #d5dce5;
+            border-radius: 15px;
+
+            display: flex;
+            align-items: center;
+
+            overflow: hidden;
+        }
+
+        .file-input input {
+            border: none;
+            height: auto;
+            padding: 0;
+        }
+
+        /* BUTTON */
+
+        .save-btn {
+            background: #1010f5;
+            color: white;
+
+            border: none;
+            border-radius: 25px;
+
+            padding: 15px 50px;
+
+            font-size: 23px;
+            font-weight: 500;
+
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            background: #0808d8;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1000px) {
+            .profile-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-card {
+                max-width: 600px;
+                margin: auto;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 94%;
+            }
+
+            .page-title {
+                font-size: 40px;
+            }
+
+            .edit-card {
+                padding: 25px;
+            }
+
+            .profile-card {
+                padding: 30px 20px;
+            }
+
+            .avatar {
+                width: 200px;
+                height: 260px;
+            }
+        }
+    </style>
+
+{% endblock %}
+
+{% block sidebar %}
+                <li><a href="{% url 'main' %}"><i class="bi bi-house" ></i> Bosh sahifa</a></li>
+
+                <li><a  class="active" href="{% url 'student_profile' %}"><i class="bi bi-person-workspace"></i> Profile</a></li>
+
+                <li><a href="{% url 'courses' %}"><i class="bi bi-book"></i> Kurslar</a></li>
+
+                <li><a href="#"><i class="bi bi-people"></i> Guruhlar</a></li>
+
+                <li><a href="#"><i class="bi bi-calendar-week"></i> Haftalik jadval</a></li>
+
+                <li><a href="#"><i class="bi bi-person-check"></i> Davomat</a></li>
+
+                <li><a href="#"><i class="bi bi-journal-bookmark"></i> Guruh jurnali</a></li>
+
+                <li><a href="#"><i class="bi bi-file-earmark-text"></i> Normativ</a></li>
+
+                <li><a href="#"><i class="bi bi-list-task"></i> Tekshirish navbati</a></li>
+
+                <li><a href="#"><i class="bi bi-star"></i> Baholash</a></li>
+
+                <li><a href="#"><i class="bi bi-bar-chart"></i> Natijalarim</a></li>
+
+                <li><a href="#"><i class="bi bi-coin"></i> Coin sahifasi</a></li>
+
+                <li><a href="#"><i class="bi bi-trophy"></i> Reyting</a></li>
+
+                <li><a href="#"><i class="bi bi-bag"></i> Do'kon</a></li>
+
+                <li><a href="#"><i class="bi bi-cart3"></i> Xaridlar</a></li>
+
+                <li><a href="{% url 'news' %}"><i class="bi bi-newspaper"></i> Yangiliklar</a></li>
+
+                <li><a href="#"><i class="bi bi-mortarboard"></i> Student dashboard</a></li>
+
+                <li><a href="#"><i class="bi bi-person-workspace"></i> Teacher dashboard</a></li>
+                {% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+
+    <h1 class="page-title">Profilim</h1>
+
+    <div class="profile-wrapper">
+
+        <!-- LEFT PROFILE -->
+
+        <div class="profile-card">
+            {% if student.avatar %}
+                <img style="width: 300px; height: 360px; border-radius: 40px; margin-top: 50px; margin-bottom: 20px" src="{{ student.avatar.url }}">
+            {% else %}
+                <img style="width: 300px; height: 360px; border-radius: 40px; margin-top: 50px" src="{% static 'no_avatar_img.png' %}">
+            {% endif %}
+
+            <h2 class="username" style="margin-top: 20px">{{ student.user.username }}</h2>
+
+            <div class="role">
+                Student
+            </div>
+
+            <p class="phone-text">
+                {% if student.phone_number %}
+                    {{ student.phone_number }}
+                {% else %}
+                    You didn't give ur number
+                {% endif %}
+            </p>
+
+        </div>
+
+
+        <!-- RIGHT EDIT FORM -->
+
+        <div class="edit-card">
+
+            <h2 class="edit-title">
+                Tahrirlash
+            </h2>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label>
+                        Study place
+                    </label>
+
+                    {{form.study_place}}
+                </div>
+
+
+                <div class="form-group">
+                    <label>
+                        Phone number
+                    </label>
+
+                    {{form.phone_number}}
+                </div>
+
+
+                    <label>
+                        Avatar
+                    </label>
+                    {{form.avatar}}
+
+                <div class="form-group" style="margin-top: 20px">
+                    <label>
+                        Address
+                    </label>
+
+                    {{form.address}}
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="save-btn">
+                    Saqlash
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+
+
+
+

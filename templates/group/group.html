@@ -1,0 +1,335 @@
+{% extends 'main.html' %}
+
+{% block title %}
+Guruhlar
+{% endblock %}
+
+{% block css %}
+<style>
+.groups-page {
+    width: 100%;
+    padding: 28px 30px;
+    box-sizing: border-box;
+}
+
+
+/* Заголовок */
+
+.groups-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.groups-header h1 {
+    display: inline-block;
+    margin: 0;
+    color: #1d2a44;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.version {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 3px 7px;
+    background: #eef2ff;
+    color: #50618b;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+
+/* Кнопка создания группы */
+
+.add-group-btn {
+    display: block;
+
+    background: #3155e7;
+    color: white;
+
+    text-decoration: none;
+
+    padding: 9px 16px;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+.add-group-btn:hover {
+    background: #2446d2;
+}
+
+
+/* Таблица */
+
+.groups-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+
+    background: white;
+
+    border: 1px solid #dfe4ec;
+    border-radius: 9px;
+
+    overflow: hidden;
+}
+
+
+.groups-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    table-layout: fixed;
+
+    font-size: 13px;
+}
+
+
+/* Шапка таблицы */
+
+.groups-table thead {
+    background: #f8f9fb;
+}
+
+.groups-table th {
+    text-align: left;
+
+    padding: 11px 14px;
+
+    color: #667085;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    border-bottom: 1px solid #e1e5eb;
+}
+
+
+/* Ячейки */
+
+.groups-table td {
+    padding: 11px 14px;
+
+    color: #344054;
+
+    border-bottom: 1px solid #e8ebf0;
+
+    height: 22px;
+}
+
+.groups-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* Ссылки групп */
+
+.groups-table td a {
+    color: #3155e7;
+
+    text-decoration: none;
+
+    font-weight: 600;
+}
+
+.groups-table td a:hover {
+    text-decoration: underline;
+}
+
+
+/* Статус */
+
+.status {
+    display: inline-block;
+
+    padding: 3px 9px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.status.active {
+    color: #24905b;
+    background: #e5f6ed;
+}
+
+.status.inactive {
+    color: #98a2b3;
+    background: #f0f2f5;
+}
+
+    /* RESPONSIVE */
+
+    @media (max-width: 800px) {
+
+        .groups-page {
+            padding: 15px;
+        }
+
+        .groups-table-wrapper {
+            overflow-x: auto;
+        }
+
+        .groups-table {
+            min-width: 650px;
+        }
+
+    }
+
+</style>
+{% endblock %}
+
+{% block sidebar %}
+    <li><a href="{% url 'main' %}"><i class="bi bi-house" ></i> Bosh sahifa</a></li>
+
+    {% if request.user.role == 'teacher' %}
+    <li><a href="{% url 'teacher_profile' %}"><i class="bi bi-person-workspace"></i> Profile</a></li>
+    {% elif request.user.role == 'student' %}
+    <li><a href="{% url 'student_profile' %}"><i class="bi bi-person-workspace"></i> Profile</a></li>
+    {% endif %}
+
+    <li><a href="{% url 'courses' %}"><i class="bi bi-book"></i> Kurslar</a></li>
+
+    <li><a class="active" href="{% url 'group' %}"><i class="bi bi-people"></i> Guruhlar</a></li>
+
+    <li><a href="#"><i class="bi bi-calendar-week"></i> Haftalik jadval</a></li>
+
+    <li><a href="#"><i class="bi bi-person-check"></i> Davomat</a></li>
+
+    <li><a href="#"><i class="bi bi-journal-bookmark"></i> Guruh jurnali</a></li>
+
+    <li><a href="#"><i class="bi bi-file-earmark-text"></i> Normativ</a></li>
+
+    <li><a href="#"><i class="bi bi-list-task"></i> Tekshirish navbati</a></li>
+
+    <li><a href="#"><i class="bi bi-star"></i> Baholash</a></li>
+
+    <li><a href="#"><i class="bi bi-bar-chart"></i> Natijalarim</a></li>
+
+    <li><a href="#"><i class="bi bi-coin"></i> Coin sahifasi</a></li>
+
+    <li><a href="#"><i class="bi bi-trophy"></i> Reyting</a></li>
+
+    <li><a href="#"><i class="bi bi-bag"></i> Do'kon</a></li>
+
+    <li><a href="#"><i class="bi bi-cart3"></i> Xaridlar</a></li>
+
+    <li><a href="{% url 'news' %}"><i class="bi bi-newspaper"></i> Yangiliklar</a></li>
+
+    <li><a href="#"><i class="bi bi-mortarboard"></i> Student dashboard</a></li>
+
+    <li><a href="#"><i class="bi bi-person-workspace"></i> Teacher dashboard</a></li>
+{% endblock %}
+
+{% block topbar %}
+    <a href="{% url 'main' %}">Bosh sahifa</a>
+
+    <a href="{% url 'courses' %}">Kurslar</a>
+
+    <a href="{% url 'group' %}" style="color: #2952e3">Guruhlar</a>
+
+    <a href="#">Jadval</a>
+
+    <a href="#">Normativ</a>
+
+    <a href="#">Do'kon</a>
+
+    <a href="{% url 'news' %}">Yangiliklar</a>
+{% endblock %}
+
+{% block content %}
+<div class="groups-page">
+
+    <!-- Заголовок страницы -->
+    <div class="groups-header">
+
+        <div>
+            <h1>Guruhlar</h1>
+        </div>
+
+        <div class="header-actions">
+            {% if request.user.role == 'admin' %}
+            <a href="{% url 'admin_panel' %}" class="add-group-btn">
+                Guruh ochish
+            </a>
+            {% else %}
+            {% endif %}
+        </div>
+
+    </div>
+
+
+    <!-- Таблица групп -->
+    <div class="groups-table-wrapper">
+
+        <table class="groups-table">
+
+            <thead>
+                <tr>
+                    <th>Guruh</th>
+                    <th>Kurs</th>
+                    <th>O'qituvchi</th>
+                    <th>Max O'quvchilar</th>
+                    <th>Holat</th>
+                    {% if request.user.role == 'admin' %}
+                    <th>Edit</th>
+                    {% endif %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for group in groups %}
+                <tr>
+                    <td>
+                        {{ group.title }}
+                    </td>
+
+                    <td>
+                        {{ group.course.title }}
+                    </td>
+
+                    <td>
+                        {{ group.teacher.user.username }}
+                    </td>
+
+                    <td>
+                        {{ group.max_students }}
+                    </td>
+
+                    <td>
+
+                        {% if group.is_active %}
+                        <span class="status active">
+                            Aktiv
+                        </span>
+                        {% else %}
+                        <span class="status inactive">
+                            Yopiq
+                        </span>
+                        {% endif %}
+                    </td>
+                    {% if request.user.role == 'admin' %}
+                    <td>
+                        <a href="{% url 'group_edit' group.id %}"><button>Edit</button></a>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+{% endblock %}

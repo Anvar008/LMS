@@ -1,0 +1,480 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block title %}Kurslar{% endblock %}
+
+{% block css %}
+<style>
+
+.courses-page{
+    padding:40px;
+    background:#eef3fb;
+    min-height:100vh;
+}
+
+/*================ HEADER ================*/
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:40px;
+}
+
+.header-left h1{
+    font-size:60px;
+    font-weight:800;
+    color:#1f2937;
+    margin-bottom:10px;
+}
+
+.header-left p{
+    font-size:18px;
+    color:#6b7280;
+}
+
+.add-course-btn{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    background:#3558e6;
+    color:#fff;
+
+    padding:16px 28px;
+
+    border-radius:16px;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+    transition:.25s;
+}
+
+.add-course-btn:hover{
+    background:#2647d8;
+    color:#fff;
+    transform:translateY(-2px);
+}
+
+/*================ GRID ================*/
+
+.course-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+
+    gap:30px;
+
+}
+
+/*================ CARD ================*/
+
+.course-card{
+
+    background:#fff;
+
+    border-radius:24px;
+
+    overflow:hidden;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.06);
+
+    transition:.3s;
+
+}
+
+.course-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 45px rgba(0,0,0,.12);
+
+}
+
+/*================ CREATE CARD ================*/
+
+.create-card{
+
+    padding:45px 35px;
+
+    text-align:center;
+
+}
+
+.create-icon{
+
+    width:110px;
+    height:110px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    background:#edf2ff;
+
+    color:#3558e6;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:48px;
+
+    margin-bottom:30px;
+
+}
+
+.create-card h2{
+
+    font-size:34px;
+
+    margin-bottom:15px;
+
+    color:#1f2937;
+
+}
+
+.create-card p{
+
+    color:#6b7280;
+
+    line-height:1.8;
+
+    margin-bottom:30px;
+
+}
+
+.create-btn{
+
+    display:block;
+
+    background:#3558e6;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:16px;
+
+    border-radius:14px;
+
+    font-weight:700;
+
+    transition:.25s;
+
+}
+
+.create-btn:hover{
+
+    background:#2647d8;
+
+    color:white;
+
+}
+
+/*================ COURSE IMAGE ================*/
+
+.course-image{
+
+    height:180px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:70px;
+
+    color:white;
+
+}
+
+.python{
+
+    background:linear-gradient(135deg,#3558e6,#6b8cff);
+
+}
+
+.frontend{
+
+    background:linear-gradient(135deg,#06b6d4,#3b82f6);
+
+}
+
+.design{
+
+    background:linear-gradient(135deg,#9333ea,#c026d3);
+
+}
+
+/*================ CONTENT ================*/
+
+.course-content{
+
+    padding:28px;
+
+}
+
+.course-content h3{
+
+    font-size:28px;
+
+    margin:18px 0 12px;
+
+    color:#1f2937;
+
+}
+
+.course-content p{
+
+    color:#6b7280;
+
+    line-height:1.7;
+
+}
+
+/*================ BADGES ================*/
+
+.badge{
+
+    display:inline-block;
+
+    padding:8px 16px;
+
+    border-radius:999px;
+
+    font-size:13px;
+
+    font-weight:700;
+
+}
+
+.backend{
+
+    background:#eef2ff;
+
+    color:#3558e6;
+
+}
+
+.web{
+
+    background:#e8fff5;
+
+    color:#059669;
+
+}
+
+.ui{
+
+    background:#f4e8ff;
+
+    color:#9333ea;
+
+}
+
+/*================ FOOTER ================*/
+
+.course-footer{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin:24px 0;
+
+    color:#64748b;
+
+}
+
+/*================ BUTTON ================*/
+
+.details-btn{
+
+    display:block;
+
+    text-align:center;
+
+    background:#3558e6;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:14px;
+
+    border-radius:14px;
+
+    font-weight:700;
+
+    transition:.25s;
+
+}
+
+.details-btn:hover{
+
+    background:#2647d8;
+
+    color:white;
+
+}
+
+@media(max-width:900px){
+
+    .page-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:20px;
+
+    }
+
+    .header-left h1{
+
+        font-size:42px;
+
+    }
+
+}
+</style>
+
+{% endblock %}
+
+{% block sidebar %}
+                <li><a href="{% url 'main' %}"><i class="bi bi-house" ></i> Bosh sahifa</a></li>
+
+                {% if request.user.role == 'teacher' %}
+                <li><a href="{% url 'teacher_profile' %}"><i class="bi bi-person-workspace"></i> Profile</a></li>
+                {% elif request.user.role == 'student' %}
+                <li><a href="{% url 'student_profile' %}"><i class="bi bi-person-workspace"></i> Profile</a></li>
+                {% endif %}
+
+                <li><a class="active" href="{% url 'courses' %}"><i class="bi bi-book"></i> Kurslar</a></li>
+
+                <li><a href="{% url 'group' %}"><i class="bi bi-people"></i> Guruhlar</a></li>
+
+                <li><a href="#"><i class="bi bi-calendar-week"></i> Haftalik jadval</a></li>
+
+                <li><a href="#"><i class="bi bi-person-check"></i> Davomat</a></li>
+
+                <li><a href="#"><i class="bi bi-journal-bookmark"></i> Guruh jurnali</a></li>
+
+                <li><a href="#"><i class="bi bi-file-earmark-text"></i> Normativ</a></li>
+
+                <li><a href="#"><i class="bi bi-list-task"></i> Tekshirish navbati</a></li>
+
+                <li><a href="#"><i class="bi bi-star"></i> Baholash</a></li>
+
+                <li><a href="#"><i class="bi bi-bar-chart"></i> Natijalarim</a></li>
+
+                <li><a href="#"><i class="bi bi-coin"></i> Coin sahifasi</a></li>
+
+                <li><a href="#"><i class="bi bi-trophy"></i> Reyting</a></li>
+
+                <li><a href="#"><i class="bi bi-bag"></i> Do'kon</a></li>
+
+                <li><a href="#"><i class="bi bi-cart3"></i> Xaridlar</a></li>
+
+                <li><a href="{% url 'news' %}"><i class="bi bi-newspaper"></i> Yangiliklar</a></li>
+
+                <li><a href="#"><i class="bi bi-mortarboard"></i> Student dashboard</a></li>
+
+                <li><a href="#"><i class="bi bi-person-workspace"></i> Teacher dashboard</a></li>
+{% endblock %}
+
+{% block topbar %}
+
+                    <a href="{% url 'main' %}" >Bosh sahifa</a>
+
+                    <a href="{% url 'courses' %}" style="color: #2952e3">Kurslar</a>
+
+                    <a href="{% url 'group' %}">Guruhlar</a>
+
+                    <a href="#">Jadval</a>
+
+                    <a href="#">Normativ</a>
+
+                    <a href="#">Do'kon</a>
+
+                    <a href="{% url 'news' %}">Yangiliklar</a>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="courses-page">
+
+    <div class="page-header">
+
+        <div class="header-left">
+
+            <h1>Kurslar</h1>
+
+            <p>Barcha kurslarni boshqarish</p>
+
+        </div>
+        {% if request.user.role == 'admin' %}
+        <a href="{% url 'admin_panel' %}" class="add-course-btn">
+
+            <i class="bi bi-plus-lg"></i>
+
+            Kurs qo'shish
+
+        </a>
+        {% endif %}
+
+    </div>
+
+    <div class="course-grid">
+
+        <!-- PYTHON -->
+        {% for course in courses %}
+
+        <div class="course-card">
+
+            <img style="width: 200px; height: 200px; margin-left: 75px" src="{{ course.image.url }}">
+
+            <div class="course-content">
+
+                <span class="badge backend">
+                    {{ course.category.title }}
+                </span>
+                    <h3>{{ course.title }}</h3>
+
+                    <p style="height: 50px; width: 500px">
+                        {{course.description|slice:'35'}}.....
+                    </p>
+
+                    <div class="course-footer" >
+
+                        <span>
+                            {{ course.price }} so'm/month
+                        </span>
+
+                        <span>
+                            {{ course.duration }} oy
+                        </span>
+
+                    </div>
+                <a href="{% url 'course_detail' course.id %}" class="details-btn">
+
+                    Batafsil
+
+                </a>
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

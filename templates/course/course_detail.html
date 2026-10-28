@@ -1,0 +1,806 @@
+{% extends 'main.html' %}
+
+
+{% block title %}
+    Batafsil kurs
+{% endblock %}
+
+
+{% block logo %}
+
+    <div class="logo">
+
+        LMS
+
+        {% if request.user.role == 'admin' %}
+            <a href="{% url 'admin_panel' %}"
+               class="active"
+               style="margin-left: 50px;">
+                Admin Panel
+            </a>
+        {% endif %}
+
+    </div>
+
+{% endblock %}
+
+
+{% block sidebar %}
+
+    <li>
+        <a href="{% url 'main' %}">
+            <i class="bi bi-house"></i>
+            Bosh sahifa
+        </a>
+    </li>
+
+
+    {% if request.user.role == 'teacher' %}
+
+        <li>
+            <a href="{% url 'teacher_profile' %}">
+                <i class="bi bi-person-workspace"></i>
+                Profile
+            </a>
+        </li>
+
+    {% elif request.user.role == 'student' %}
+
+        <li>
+            <a href="{% url 'student_profile' %}">
+                <i class="bi bi-person-workspace"></i>
+                Profile
+            </a>
+        </li>
+
+    {% endif %}
+
+
+    <li>
+        <a href="{% url 'courses' %}" class="active">
+            <i class="bi bi-book"></i>
+            Kurslar
+        </a>
+    </li>
+
+
+    <li>
+        <a href="{% url 'group' %}">
+            <i class="bi bi-people"></i>
+            Guruhlar
+        </a>
+    </li>
+
+
+    <li>
+        <a href="#">
+            <i class="bi bi-calendar-week"></i>
+            Haftalik jadval
+        </a>
+    </li>
+
+
+    <li>
+        <a href="#">
+            <i class="bi bi-person-check"></i>
+            Davomat
+        </a>
+    </li>
+
+
+    <li>
+        <a href="#">
+            <i class="bi bi-journal-bookmark"></i>
+            Guruh jurnali
+        </a>
+    </li>
+
+
+    <li>
+        <a href="#">
+            <i class="bi bi-file-earmark-text"></i>
+            Normativ
+        </a>
+    </li>
+
+
+    <li>
+        <a href="#">
+            <i class="bi bi-list-task"></i>
+            Tekshirish navbati
+        </a>
+    </li>
+
+
+    <li>
+        <a href="#">
+            <i class="bi bi-star"></i>
+            Baholash
+        </a>
+    </li>
+
+
+    <li>
+        <a href="#">
+            <i class="bi bi-bar-chart"></i>
+            Natijalarim
+        </a>
+    </li>
+
+
+    <li>
+        <a href="#">
+            <i class="bi bi-coin"></i>
+            Coin sahifasi
+        </a>
+    </li>
+
+
+    <li>
+        <a href="#">
+            <i class="bi bi-trophy"></i>
+            Reyting
+        </a>
+    </li>
+
+
+    <li>
+        <a href="#">
+            <i class="bi bi-bag"></i>
+            Do'kon
+        </a>
+    </li>
+
+
+    <li>
+        <a href="#">
+            <i class="bi bi-cart3"></i>
+            Xaridlar
+        </a>
+    </li>
+
+
+    <li>
+        <a href="{% url 'news' %}">
+            <i class="bi bi-newspaper"></i>
+            Yangiliklar
+        </a>
+    </li>
+
+
+    <li>
+        <a href="#">
+            <i class="bi bi-mortarboard"></i>
+            Student dashboard
+        </a>
+    </li>
+
+
+    <li>
+        <a href="#">
+            <i class="bi bi-person-workspace"></i>
+            Teacher dashboard
+        </a>
+    </li>
+
+{% endblock %}
+
+
+{% block topbar %}
+
+    <a href="{% url 'main' %}">
+        Bosh sahifa
+    </a>
+
+    <a href="{% url 'courses' %}">
+        Kurslar
+    </a>
+
+    <a href="{% url 'group' %}">
+        Guruhlar
+    </a>
+
+    <a href="#">
+        Jadval
+    </a>
+
+    <a href="#">
+        Normativ
+    </a>
+
+    <a href="#">
+        Do'kon
+    </a>
+
+    <a href="{% url 'news' %}">
+        Yangiliklar
+    </a>
+
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+    .course-detail {
+        padding: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+
+    /* BACK */
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        color: #64748b;
+        text-decoration: none;
+
+        font-size: 14px;
+
+        margin-bottom: 25px;
+
+        transition: 0.2s;
+    }
+
+    .back-link:hover {
+        color: #2853d6;
+    }
+
+
+    /* MAIN CARD */
+
+    .course-card {
+        background: white;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 16px;
+
+        overflow: hidden;
+
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+    }
+
+
+    /* COURSE HEADER */
+
+    .course-header {
+        padding: 35px;
+
+        background: linear-gradient(
+            135deg,
+            #2853d6,
+            #4267e8
+        );
+
+        color: white;
+    }
+
+
+    .course-category {
+        display: inline-block;
+
+        padding: 7px 13px;
+
+        background: rgba(255, 255, 255, 0.18);
+
+        border-radius: 20px;
+
+        font-size: 13px;
+
+        margin-bottom: 15px;
+    }
+
+
+    .course-title {
+        font-size: 32px;
+
+        font-weight: 700;
+
+        margin-bottom: 12px;
+    }
+
+
+    .course-short-description {
+        font-size: 16px;
+
+        line-height: 1.6;
+
+        max-width: 800px;
+
+        opacity: 0.9;
+    }
+
+
+    /* BODY */
+
+    .course-body {
+        padding: 35px;
+    }
+
+
+    .course-grid {
+        display: grid;
+
+        grid-template-columns: 2fr 1fr;
+
+        gap: 35px;
+    }
+
+
+    /* DESCRIPTION */
+
+    .section-title {
+        font-size: 21px;
+
+        font-weight: 700;
+
+        color: #1e293b;
+
+        margin-bottom: 15px;
+    }
+
+
+    .course-description {
+        color: #64748b;
+
+        line-height: 1.8;
+
+        font-size: 15px;
+
+        white-space: pre-line;
+    }
+
+
+    /* INFO */
+
+    .course-info {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 14px;
+    }
+
+
+    .info-item {
+        display: flex;
+
+        align-items: center;
+
+        gap: 14px;
+
+        padding: 15px;
+
+        background: #f8fafc;
+
+        border-radius: 10px;
+
+        border: 1px solid #e5e7eb;
+    }
+
+
+    .info-icon {
+        width: 40px;
+
+        height: 40px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        border-radius: 9px;
+
+        background: #eef3ff;
+
+        color: #2853d6;
+
+        font-size: 18px;
+    }
+
+
+    .info-text {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 3px;
+    }
+
+
+    .info-label {
+        font-size: 12px;
+
+        color: #94a3b8;
+    }
+
+
+    .info-value {
+        font-size: 14px;
+
+        font-weight: 600;
+
+        color: #334155;
+    }
+
+
+    /* PRICE */
+
+    .course-price {
+        margin-top: 25px;
+
+        padding: 22px;
+
+        background: #f8fafc;
+
+        border-radius: 12px;
+
+        border: 1px solid #e5e7eb;
+
+        text-align: center;
+    }
+
+
+    .price-label {
+        font-size: 13px;
+
+        color: #64748b;
+
+        margin-bottom: 5px;
+    }
+
+
+    .price {
+        font-size: 28px;
+
+        font-weight: 700;
+
+        color: #2853d6;
+    }
+
+
+    /* BUTTON */
+
+    .enroll-button {
+        display: block;
+
+        width: 100%;
+
+        margin-top: 15px;
+
+        padding: 13px 20px;
+
+        background: #2853d6;
+
+        color: white;
+
+        border: none;
+
+        border-radius: 10px;
+
+        text-align: center;
+
+        text-decoration: none;
+
+        font-size: 15px;
+
+        font-weight: 600;
+
+        cursor: pointer;
+
+        transition: 0.2s;
+    }
+
+
+    .enroll-button:hover {
+        background: #1f43b4;
+
+        color: white;
+
+        transform: translateY(-1px);
+    }
+
+
+    /* RESPONSIVE */
+
+    @media (max-width: 850px) {
+
+        .course-grid {
+            grid-template-columns: 1fr;
+        }
+
+    }
+
+
+    @media (max-width: 600px) {
+
+        .course-detail {
+            padding: 20px;
+        }
+
+        .course-header {
+            padding: 25px;
+        }
+
+        .course-body {
+            padding: 25px;
+        }
+
+        .course-title {
+            font-size: 25px;
+        }
+
+    }
+
+</style>
+
+
+<div class="course-detail">
+
+
+    <!-- BACK -->
+
+    <a href="{% url 'courses' %}" class="back-link">
+
+        <i class="bi bi-arrow-left"></i>
+
+        Barcha kurslar
+
+    </a>
+
+
+    <!-- COURSE -->
+
+    <div class="course-card">
+
+
+        <!-- HEADER -->
+
+        <div class="course-header">
+
+            <div class="course-category">
+
+                {% if course.category %}
+                    {{ course.category }}
+                {% else %}
+                    Kurs
+                {% endif %}
+
+            </div>
+
+
+            <h1 class="course-title">
+                {{ course.title }}
+            </h1>
+
+
+            <p class="course-short-description">
+
+                {% if course.short_description %}
+                    {{ course.short_description }}
+                {% else %}
+                    Kurs haqida qisqacha ma'lumot
+                {% endif %}
+
+            </p>
+
+        </div>
+
+
+        <!-- BODY -->
+
+        <div class="course-body">
+
+
+            <div class="course-grid">
+
+
+                <!-- LEFT -->
+
+                <div>
+
+                    <h2 class="section-title">
+                        Kurs haqida
+                    </h2>
+
+
+                    <div class="course-description">
+
+                        {% if course.description %}
+
+                            {{ course.description }}
+
+                        {% else %}
+
+                            Ushbu kurs haqida ma'lumot mavjud emas.
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- RIGHT -->
+
+                <div>
+
+
+                    <h2 class="section-title">
+                        Kurs ma'lumotlari
+                    </h2>
+
+
+                    <div class="course-info">
+
+
+                        <!-- TEACHER -->
+
+                        <div class="info-item">
+
+                            <div class="info-icon">
+                                <i class="bi bi-person"></i>
+                            </div>
+
+                            <div class="info-text">
+
+                                <span class="info-label">
+                                    O'qituvchi
+                                </span>
+
+                                <span class="info-value">
+
+                                    {% if course.teacher %}
+                                        {{ course.teacher }}
+                                    {% else %}
+                                        Belgilanmagan
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CATEGORY -->
+
+                        <div class="info-item">
+
+                            <div class="info-icon">
+                                <i class="bi bi-folder"></i>
+                            </div>
+
+                            <div class="info-text">
+
+                                <span class="info-label">
+                                    Kategoriya
+                                </span>
+
+                                <span class="info-value">
+
+                                    {% if course.category %}
+                                        {{ course.category }}
+                                    {% else %}
+                                        Belgilanmagan
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DURATION -->
+
+                        <div class="info-item">
+
+                            <div class="info-icon">
+                                <i class="bi bi-clock"></i>
+                            </div>
+
+                            <div class="info-text">
+
+                                <span class="info-label">
+                                    Davomiyligi
+                                </span>
+
+                                <span class="info-value">
+
+                                    {% if course.duration %}
+                                        {{ course.duration }}
+                                    {% else %}
+                                        Belgilanmagan
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- STUDENTS -->
+
+                        <div class="info-item">
+
+                            <div class="info-icon">
+                                <i class="bi bi-people"></i>
+                            </div>
+
+                            <div class="info-text">
+
+                                <span class="info-label">
+                                    O'quvchilar
+                                </span>
+
+                                <span class="info-value">
+
+                                    {% if course.students.count %}
+                                        {{ course.students.count }}
+                                    {% else %}
+                                        0
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- PRICE -->
+
+                    <div class="course-price">
+
+                        <div class="price-label">
+                            Kurs narxi
+                        </div>
+
+                        <div class="price">
+
+                            {% if course.price %}
+                                {{ course.price }} so'm
+                            {% else %}
+                                Bepul
+                            {% endif %}
+
+                        </div>
+
+
+                        {% if request.user.role == 'student' %}
+
+                            <a href="#"
+                               class="enroll-button">
+
+                                Kursga yozilish
+
+                            </a>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
